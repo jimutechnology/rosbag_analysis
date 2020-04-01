@@ -1,3 +1,41 @@
+# What is this
+
+This package consists of two parts. The first part converts a .bag rosbag file into separated .mat files by topic, with library code under `/src` and executed scripts under `/scripts`. The second part are a bunch of .m files that load .mat files and visualize or analyze the data in Octave, under `/analysis`.
+
+# How to use the code
+1. Put your rosbag file under the path `/rosbag_to_matlab/scripts`. Assume its name is `XYZ.bag`.
+
+2. Under the same directory, run
+
+`./rosbag2mat.sh XYZ`
+
+This will generate a `/XYZ` folder containing all the .mat files, each corresponding to a topic.
+
+3. Open Octave. In the console, run 
+
+`robot = load_robot('XYZ');`
+
+And this will load all the robot data into one structure, `robot`. Notice that you have to be under the path where the `XYZ` folder is. You can either copy the folder to `/analysis`, or preferably add `/analysis` to the search paths in Octave.
+
+4. Now you can use the `plot_XXX()` functions to visualize the robot data. You can always write your own visualization or data analysis scripts. 
+
+In some scripts, e.g. `plot_body.m`, it is already demonstrated that you can load the data of two robots (when they are working together) into separated structures, and plot them in the same plot, by proper simple math on the time axis. This will help us a lot in analyzing the formation control of two robots.
+
+# What you can do
+1. Feel free to contribute to the directory `/analysis`. Be sure to add the description at the start of the .m files so other users can check how to use the scripts with `help` command in Octave.
+
+2. Any other contribution is very much welcome.
+
+# Know issues
+1. Some topics can't be converted into .mat files because the message is too complicated. The parser is not that robust to convert any ROS messages into Matlab/Octave.
+
+2. Sometimes a .bag file fails to be converted into .mat files with this tool. My guess for now is that you have to `catkin_make` the same `parking_robot` version as the one generating the .bag file, or at least with the same `robot_msgs` version, so that the right header files / deserialization method are used. Of course, you have to source the `devel/setup.bash` after compiling your `parking_robot`. Whether this is the root cause remains to be confirmed.
+
+
+----
+# IGNORE THE REST. IT'S THE PREVIOUS README.
+----
+
 # rosbag_to_matlab
 
 This package contains utility programs for getting rosbag files into matlab.
